@@ -5,7 +5,7 @@ class HomeViewController: UIViewController {
     let trackManager: TrackManager = TrackManager()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()  
     }
 }
 
