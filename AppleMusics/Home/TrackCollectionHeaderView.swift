@@ -14,7 +14,7 @@ class TrackCollectionHeaderView: UICollectionReusableView {
     }
     
     func update(with item: AVPlayerItem) {
-        // TODO: 헤더뷰 업데이트 하기
+        // 헤더뷰 업데이트 하기
         self.item = item
         guard let track = item.convertToTrack() else { return }
         
@@ -24,7 +24,7 @@ class TrackCollectionHeaderView: UICollectionReusableView {
     }
     
     @IBAction func cardTapped(_ sender: UIButton) {
-        // TODO: 탭했을때 처리
+        // 탭했을때 처리
         guard let todaysItem = item else { return }
         tapHandler?(todaysItem)
     }

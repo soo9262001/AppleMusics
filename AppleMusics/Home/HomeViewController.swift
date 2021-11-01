@@ -1,7 +1,7 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    // TODO: 트랙관리 객체 추가
+    // 트랙관리 객체 추가
     let trackManager: TrackManager = TrackManager()
     
     override func viewDidLoad() {
@@ -10,15 +10,15 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UICollectionViewDataSource {
-    // 몇개 표시 할까?
+    // 몇개 표시
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // TODO: 트랙매니저에서 트랙갯수 가져오기
+        // 트랙매니저에서 트랙갯수 가져오기
         return trackManager.tracks.count
     }
     
-    // 셀 어떻게 표시 할까?
+    // 셀 어떻게 표시
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // TODO: 셀 구성하기
+        // 셀 구성하기
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackCollectionViewCell", for: indexPath) as?
                 TrackCollectionViewCell else { return UICollectionViewCell() }
         
@@ -28,11 +28,11 @@ extension HomeViewController: UICollectionViewDataSource {
         return cell
     }
     
-    // 헤더뷰 어떻게 표시할까?
+    // 헤더뷰 어떻게 표시
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            // TODO: 헤더 구성하기
+            // 헤더 구성하기
             guard let item = trackManager.todaysTrack else {
                 return UICollectionReusableView()
             }
@@ -44,6 +44,12 @@ extension HomeViewController: UICollectionViewDataSource {
             header.update(with: item)
             header.tapHandler = { item -> Void in
                 // 플레이어 띄우기
+                let playerStoryboard = UIStoryboard.init(name: "Player", bundle: nil)
+                guard let playerVC = playerStoryboard.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else { return }
+                playerVC.simplePlayer.replaceCurrentItem(with: item)
+                
+                self.present(playerVC, animated: true, completion: nil)
+                
                 print("\(item.convertToTrack()?.title)")
             }
             
@@ -55,17 +61,23 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 extension HomeViewController: UICollectionViewDelegate {
-    // 클릭했을때 어떻게 할까?
+    // 클릭했을때
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: 곡 클릭시 플레이어뷰 띄우기
+        // 곡 클릭시 플레이어뷰 띄우기
+        let playerStoryboard = UIStoryboard.init(name: "Player", bundle: nil)
+        guard let playerVC = playerStoryboard.instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else { return }
+        let item = trackManager.tracks[indexPath.item]
+        playerVC.simplePlayer.replaceCurrentItem(with: item)
+        
+        present(playerVC, animated: true, completion: nil)
     }
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    // 셀 사이즈 어떻게 할까?
+    // 셀 사이즈
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // 20 - card(width) - 20 - card(width) - 20
-        // TODO: 셀사이즈 구하기
+        // 셀사이즈 구하기
         let itemSpacing: CGFloat = 20
         let margin: CGFloat = 20
         let width = (collectionView.bounds.width - itemSpacing - margin * 2) / 2
